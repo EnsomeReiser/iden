@@ -1,24 +1,24 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2023", "DOM"],
+    "target": "ES2024",
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
     "jsx": "react-jsx",
     "allowJs": false,
 
     // Bundler mode
     "moduleResolution": "bundler",
-    "module": "preserve",
+    "module": "ESNext",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "noEmit": true,
     "strictNullChecks": true,
+    "moduleDetection": "force",
 
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["./src/components/ui/*"]
+  "include": ["**/*.ts", "**/*.tsx"]
 }
