@@ -1,5 +1,4 @@
 import { Outlet, createRootRoute } from "@tanstack/react-router";
-
 import { Sidebar, SidebarToggle } from "@/components/sidebar";
 
 export const Route = createRootRoute({
