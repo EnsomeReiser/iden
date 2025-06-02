@@ -1,10 +1,11 @@
 import { SidebarContext } from "@/components/sidebar/sidebar-provider";
 import { Slot } from "@/components/slot";
+import { ThemeToggle } from "@/components/toggleTheme";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { type VariantProps, cva } from "class-variance-authority";
-import { Home, Search, Settings, Zap } from "lucide-react";
+import { Home, Lightbulb, Search, Settings, Zap } from "lucide-react";
 import type React from "react";
 import { useContext, useEffect, useRef, useState } from "react";
 
@@ -60,6 +61,7 @@ export const Sidebar = ({ resizeHandle = true }: SidebarProps) => {
 		<div
 			className={cn(
 				"group relative flex h-full flex-col overflow-hidden bg-gray-50 transition-all",
+				"dark:bg-gray-800 ",
 				isMouseDown ? "duration-0" : "duration-200",
 			)}
 			style={{
@@ -72,12 +74,12 @@ export const Sidebar = ({ resizeHandle = true }: SidebarProps) => {
 			<Sidebar.Separator />
 			<Sidebar.Group label="Hello">
 				<Sidebar.GroupItem asChild>
-					<Link to="/" className="Hello">
-						<Home />
-						Home
-						<span className="ml-auto rounded-sm border border-gray-300 px-1.5 py-[1px] text-gray-500 text-xs">
+					<Link to="/ideas" className="Hello">
+						<Lightbulb />
+						Your Ideas
+						{/* <span className="ml-auto rounded-sm border border-gray-300 px-1.5 py-[1px] text-gray-500 text-xs">
 							3
-						</span>
+						</span> */}
 					</Link>
 				</Sidebar.GroupItem>
 				{/* <Sidebar.GroupItem variant={"small"} icon={Home}>
@@ -90,6 +92,7 @@ export const Sidebar = ({ resizeHandle = true }: SidebarProps) => {
 			<Sidebar.Footer>
 				<Settings className="size-6" />
 				Settings
+				<ThemeToggle className="mr-3 ml-auto h-8 w-8" />
 			</Sidebar.Footer>
 			{resizeHandle && (
 				<div
@@ -108,20 +111,25 @@ export const Sidebar = ({ resizeHandle = true }: SidebarProps) => {
 Sidebar.HeaderContent = () => {
 	return (
 		<>
-			<div className="flex shrink-0 items-center gap-1 rounded-md px-2 py-1 hover:bg-gray-200">
-				<div className="flex size-10 flex-row items-center justify-center rounded-md bg-black">
+			<div
+				className={cn(
+					"flex shrink-0 items-center gap-1 rounded-md px-2 py-1 hover:bg-gray-200",
+					"dark:bg-gray-700 dark:hover:bg-gray-600",
+				)}
+			>
+				<div className="flex size-10 flex-row items-center justify-center rounded-md bg-gray-950">
 					<Zap className="size-6 text-white" />
 				</div>
 				<div className="-gap-0.5 flex select-none flex-col justify-center">
 					<h1 className="font-bold text-md tracking-wide">Iden</h1>
-					<span className="font-light text-gray-500 text-sm">
+					<span className="font-light text-gray-500 text-sm dark:text-gray-300">
 						Your ideas vault
 					</span>
 				</div>
 			</div>
 			<div className="mt-2 px-2">
 				<div className="relative">
-					<Input className="pl-8" placeholder="Search" />
+					<Input className="pl-8 dark:border-gray-700" placeholder="Search" />
 					<Search className="-translate-y-1/2 absolute top-1/2 left-2 size-4 text-muted-foreground" />
 				</div>
 			</div>
@@ -140,6 +148,7 @@ Sidebar.Footer = ({ className, ...props }: React.ComponentProps<"div">) => {
 		<div
 			className={cn(
 				"mt-auto flex w-full min-w-[224px] select-none items-center gap-2 overflow-hidden p-1 px-4 py-2 pr-2 font-medium hover:bg-gray-100",
+				"dark:hover:bg-gray-700",
 				className,
 			)}
 			{...props}
@@ -169,11 +178,11 @@ Sidebar.Group = ({
 // ITEM
 // =======================
 const sidebarItemVariants = cva(
-	"flex items-center hover:bg-gray-200 rounded-xs select-none",
+	"flex select-none items-center rounded-md hover:bg-gray-200 dark:hover:bg-gray-700",
 	{
 		variants: {
 			variant: {
-				default: "gap-2 [&_svg]:size-6 px-2 py-2 font-medium",
+				default: "gap-2 [&_svg]:size-6 px-2 py-2",
 				small: "[&_svg]:size-4 px-2 py-1 gap-1 text-sm",
 			},
 		},
@@ -208,7 +217,10 @@ Sidebar.GroupItem = ({
 Sidebar.Separator = ({ className }: React.ComponentProps<"div">) => {
 	return (
 		<div
-			className={cn("mx-auto my-1 h-0.5 w-4/5 bg-neutral-200/80", className)}
+			className={cn(
+				"mx-auto my-1 h-[1px] w-4/5 rounded-md bg-gray-200/80 dark:bg-gray-700/80",
+				className,
+			)}
 		/>
 	);
 };
