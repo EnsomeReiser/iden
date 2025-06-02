@@ -3,6 +3,7 @@ import { StrictMode } from "react";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import { SidebarProvider } from "@/components/sidebar";
+import { ThemeProvider } from "@/provider/theme-provider";
 
 const router = createRouter({ routeTree });
 
@@ -15,9 +16,11 @@ declare module "@tanstack/react-router" {
 const elem = document.getElementById("root")!;
 const app = (
 	<StrictMode>
-		<SidebarProvider>
-			<RouterProvider router={router} />
-		</SidebarProvider>
+		<ThemeProvider>
+			<SidebarProvider>
+				<RouterProvider router={router} />
+			</SidebarProvider>
+		</ThemeProvider>
 	</StrictMode>
 );
 
