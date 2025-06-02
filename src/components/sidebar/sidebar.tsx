@@ -1,8 +1,11 @@
 import { SidebarContext } from "@/components/sidebar/sidebar-provider";
+import { Slot } from "@/components/slot";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { Link } from "@tanstack/react-router";
 import { type VariantProps, cva } from "class-variance-authority";
-import { Home, type LucideProps, Search, Settings, Zap } from "lucide-react";
+import { Home, Search, Settings, Zap } from "lucide-react";
+import type React from "react";
 import { useContext, useEffect, useRef, useState } from "react";
 
 interface SidebarProps {
@@ -68,18 +71,24 @@ export const Sidebar = ({ resizeHandle = true }: SidebarProps) => {
 			</Sidebar.Header>
 			<Sidebar.Separator />
 			<Sidebar.Group label="Hello">
-				<Sidebar.GroupItem icon={Home} tag="10">
-					Hello
+				<Sidebar.GroupItem asChild>
+					<Link to="/" className="Hello">
+						<Home />
+						Home
+						<span className="ml-auto rounded-sm border border-gray-300 px-1.5 py-[1px] text-gray-500 text-xs">
+							3
+						</span>
+					</Link>
 				</Sidebar.GroupItem>
-				<Sidebar.GroupItem variant={"small"} icon={Home}>
+				{/* <Sidebar.GroupItem variant={"small"} icon={Home}>
 					Menu item
 				</Sidebar.GroupItem>
 				<Sidebar.GroupItem tag="5" variant={"small"} icon={Home}>
 					Menu item
-				</Sidebar.GroupItem>
+				</Sidebar.GroupItem> */}
 			</Sidebar.Group>
 			<Sidebar.Footer>
-				<Settings className="size-8" />
+				<Settings className="size-6" />
 				Settings
 			</Sidebar.Footer>
 			{resizeHandle && (
@@ -130,7 +139,7 @@ Sidebar.Footer = ({ className, ...props }: React.ComponentProps<"div">) => {
 	return (
 		<div
 			className={cn(
-				"mt-auto flex w-full min-w-[224px] select-none items-center gap-2 overflow-hidden p-1 px-4 py-4 pr-2 font-medium hover:bg-gray-100",
+				"mt-auto flex w-full min-w-[224px] select-none items-center gap-2 overflow-hidden p-1 px-4 py-2 pr-2 font-medium hover:bg-gray-100",
 				className,
 			)}
 			{...props}
@@ -159,11 +168,6 @@ Sidebar.Group = ({
 // =======================
 // ITEM
 // =======================
-interface SidebarItemProps extends React.ComponentProps<"div"> {
-	icon: React.FC<LucideProps>;
-	tag?: string;
-}
-
 const sidebarItemVariants = cva(
 	"flex items-center hover:bg-gray-200 rounded-xs select-none",
 	{
@@ -180,21 +184,21 @@ const sidebarItemVariants = cva(
 Sidebar.GroupItem = ({
 	className,
 	variant,
-	icon: Icon,
 	children,
-	tag,
+	asChild,
 	...props
-}: SidebarItemProps & VariantProps<typeof sidebarItemVariants>) => {
+}: React.ComponentProps<"div"> &
+	VariantProps<typeof sidebarItemVariants> & {
+		asChild?: boolean;
+	}) => {
+	const Comp = asChild ? Slot : "div";
 	return (
-		<div className={cn(sidebarItemVariants({ variant, className }))} {...props}>
-			<Icon />
+		<Comp
+			className={cn(sidebarItemVariants({ variant, className }))}
+			{...props}
+		>
 			{children}
-			{tag && (
-				<span className="ml-auto rounded-sm border border-gray-300 px-1.5 py-[1px] text-gray-500 text-xs">
-					{tag}
-				</span>
-			)}
-		</div>
+		</Comp>
 	);
 };
 // =======================
