@@ -2,6 +2,7 @@ import { createRoot } from "react-dom/client";
 import { StrictMode } from "react";
 import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
+import { SidebarProvider } from "@/components/sidebar";
 
 const router = createRouter({ routeTree });
 
@@ -14,7 +15,9 @@ declare module "@tanstack/react-router" {
 const elem = document.getElementById("root")!;
 const app = (
 	<StrictMode>
-		<RouterProvider router={router} />
+		<SidebarProvider>
+			<RouterProvider router={router} />
+		</SidebarProvider>
 	</StrictMode>
 );
 
