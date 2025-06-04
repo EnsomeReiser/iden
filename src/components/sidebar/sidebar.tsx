@@ -147,8 +147,8 @@ Sidebar.Footer = ({ className, ...props }: React.ComponentProps<"div">) => {
 	return (
 		<div
 			className={cn(
-				"mt-auto flex w-full min-w-[224px] select-none items-center gap-2 overflow-hidden p-1 px-4 py-2 pr-2 font-medium hover:bg-gray-100",
-				"dark:hover:bg-gray-700",
+				"mt-auto flex w-full min-w-[224px] select-none items-center gap-2 overflow-hidden p-1 px-4 py-2 pr-2 font-medium hover:bg-gray-200",
+				"dark:bg-gray-700 dark:hover:bg-gray-600",
 				className,
 			)}
 			{...props}
