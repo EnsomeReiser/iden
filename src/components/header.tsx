@@ -27,7 +27,7 @@ interface ActionProps {
 Header.Action = ({ icon: Icon, text, onClick }: ActionProps) => {
 	return (
 		<Button
-			className="ml-auto cursor-pointer bg-emerald-500 hover:bg-emerald-500/80 dark:text-emerald-50 dark:hover:bg-emerald-500/90"
+			className="ml-auto bg-emerald-500 hover:bg-emerald-500/80 dark:text-emerald-50 dark:hover:bg-emerald-500/90"
 			onClick={onClick}
 		>
 			{Icon && <Icon className="text-inherit" />}

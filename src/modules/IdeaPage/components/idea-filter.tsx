@@ -3,7 +3,7 @@ import { Layout } from "lucide-react";
 
 export const IdeaFilter = () => {
 	return (
-		<div className="mt-4 flex gap-2 border-gray-300 border-b pb-2 dark:border-gray-400">
+		<div className="mt-4 flex gap-2 border-gray-300 border-b px-4 pb-2 dark:border-gray-400">
 			<IdeaFilter.Item isActive>All</IdeaFilter.Item>
 			<IdeaFilter.Item>Completed</IdeaFilter.Item>
 			<IdeaFilter.Item className="ml-auto">

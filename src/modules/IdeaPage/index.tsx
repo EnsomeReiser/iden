@@ -1,5 +1,6 @@
 import { Header } from "@/components/header";
-import { IdeaFilter } from "@/modules/IdeaPage/Filter";
+import { IdeaContent } from "@/modules/IdeaPage/components/idea-content";
+import { IdeaFilter } from "@/modules/IdeaPage/components/idea-filter";
 import { Plus } from "lucide-react";
 
 export const IdeaPage = () => {
@@ -15,6 +16,7 @@ export const IdeaPage = () => {
 				/>
 			</Header>
 			<IdeaFilter />
+			<IdeaContent />
 		</>
 	);
 };
