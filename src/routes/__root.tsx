@@ -1,6 +1,5 @@
+import { Sidebar } from "@/components/sidebar";
 import { Outlet, createRootRoute } from "@tanstack/react-router";
-import { Sidebar, SidebarToggle } from "@/components/sidebar";
-import { ThemeToggle } from "@/components/toggleTheme";
 
 export const Route = createRootRoute({
 	component: () => <App />,
@@ -8,12 +7,13 @@ export const Route = createRootRoute({
 
 export function App() {
 	return (
-		<div className="relative flex h-svh w-full bg-red-50 dark:bg-green-500">
+		<div className="relative flex h-svh w-full">
 			<Sidebar />
 
-			<main className="flex flex-1">
-				<SidebarToggle />
-				<Outlet />
+			<main className="flex-1 bg-gray-50 dark:bg-gray-700">
+				<div className="mx-auto w-full lg:w-[100ch] 2xl:w-[120ch]">
+					<Outlet />
+				</div>
 			</main>
 		</div>
 	);

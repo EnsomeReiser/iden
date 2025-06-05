@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { type VariantProps, cva } from "class-variance-authority";
-import { Home, Lightbulb, Search, Settings, Zap } from "lucide-react";
+import { Lightbulb, Search, Settings, Zap } from "lucide-react";
 import type React from "react";
 import { useContext, useEffect, useRef, useState } from "react";
 
@@ -60,8 +60,8 @@ export const Sidebar = ({ resizeHandle = true }: SidebarProps) => {
 	return (
 		<div
 			className={cn(
-				"group relative flex h-full flex-col overflow-hidden bg-gray-50 transition-all",
-				"dark:bg-gray-800 ",
+				"group relative flex h-full flex-col overflow-hidden shadow-lg transition-all",
+				"dark:bg-gray-800",
 				isMouseDown ? "duration-0" : "duration-200",
 			)}
 			style={{
@@ -100,7 +100,7 @@ export const Sidebar = ({ resizeHandle = true }: SidebarProps) => {
 					onMouseDown={() => setIsMouseDown(true)}
 					onTouchStart={() => setIsMouseDown(true)}
 					className={
-						"absolute top-0 right-0 h-full w-1 cursor-ew-resize bg-gray-500 opacity-0 hover:opacity-60 group-hover:opacity-25"
+						"absolute top-0 right-0 h-full w-1 cursor-ew-resize bg-gray-500 opacity-0 hover:opacity-60 group-hover:opacity-25 dark:bg-gray-200/60"
 					}
 				/>
 			)}
