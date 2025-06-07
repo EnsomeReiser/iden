@@ -16,7 +16,6 @@ export type IdeaPotential = "High" | "Medium" | "Low";
 
 export const IdeaStatus = {
 	Draft: "Draft",
-	Ready: "Ready",
 	Executing: "Executing",
 	Executed: "Executed",
 	Archived: "Archived",

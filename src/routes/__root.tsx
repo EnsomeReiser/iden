@@ -11,7 +11,7 @@ export function App() {
 			<Sidebar />
 
 			<main className="flex-1 bg-gray-50 dark:bg-gray-800">
-				<div className="mx-auto w-full lg:w-[100ch] 2xl:w-[120ch]">
+				<div className="mx-auto flex h-full w-full flex-col lg:w-[100ch] 2xl:w-[120ch]">
 					<Outlet />
 				</div>
 			</main>
