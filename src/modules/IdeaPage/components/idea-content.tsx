@@ -1,5 +1,5 @@
 import type { ReactNode } from "@tanstack/react-router";
-import { Ellipsis, Flag, Info } from "lucide-react";
+import { Ellipsis, Flag, Info, type LucideProps } from "lucide-react";
 import type React from "react";
 
 import type {
@@ -34,10 +34,10 @@ export const IdeaContent = () => {
 					</IdeaContent.PropertiesList>
 					<IdeaContent.TagList>
 						{data.tags.slice(0, 3).map((tag) => (
-							<IdeaContent.TagItem key={tag} tag={tag} />
+							<IdeaContent.Badge key={tag} label={tag} />
 						))}
 						{/* Hiện thị dấu 3 chấm nếu tags trong list nhiều hơn 3 */}
-						{data.tags.length > 3 && <IdeaContent.TagItem tag="..." />}
+						{data.tags.length > 3 && <IdeaContent.Badge label="..." />}
 					</IdeaContent.TagList>
 					<IdeaContent.Action>
 						<IdeaContent.ActionItem
@@ -47,7 +47,7 @@ export const IdeaContent = () => {
 							View Detail
 						</IdeaContent.ActionItem>
 						<IdeaContent.ActionItem
-							className="bg-indigo-100 font-medium text-indigo-600 dark:bg-indigo-800 dark:text-foreground hover:dark:bg-indigo-600/90"
+							className="bg-indigo-100 font-medium text-indigo-600 hover:bg-indigo-50 hover:text-indigo-600 dark:bg-indigo-800 dark:text-foreground hover:dark:bg-indigo-600/90"
 							variant="ghost"
 						>
 							Execute
@@ -91,28 +91,48 @@ const IdeaPotentialStyles = {
 	Low: "bg-gray-50 text-gray-500 dark:bg-gray-800 dark:text-gray-400",
 };
 
+type BadgeProps<T extends string> = {
+	label: T;
+	styleMap?: Record<T, string>;
+	icon?: React.FC<LucideProps>;
+};
+
+function Badge<T extends string>({
+	label,
+	styleMap,
+	icon: Icon,
+}: BadgeProps<T>) {
+	return (
+		<span
+			className={cn(
+				"flex cursor-default items-center gap-1 rounded px-1.5 py-0.5 text-xs",
+				styleMap
+					? styleMap[label]
+					: "bg-gray-100 text-gray-500 dark:bg-gray-600/70 dark:text-gray-300 ",
+			)}
+		>
+			{Icon && <Icon className="size-3" />}
+			{label}
+		</span>
+	);
+}
+
+IdeaContent.Badge = Badge;
+
 IdeaContent.Header = ({ status, potential }: HeaderProps) => {
 	return (
 		<div className="flex gap-2" data-slot="header">
-			<span
-				className={cn(
-					"flex cursor-default items-center gap-1 rounded px-1.5 py-0.5 text-xs",
-					IdeaStatusStyles[status],
-				)}
-			>
-				<Info className="size-3" />
-				{status}
-			</span>
+			<IdeaContent.Badge
+				label={status}
+				styleMap={IdeaStatusStyles}
+				icon={Info}
+			/>
+			<IdeaContent.Badge
+				label={potential}
+				styleMap={IdeaPotentialStyles}
+				icon={Flag}
+			/>
 
-			<span
-				className={cn(
-					"flex items-center gap-1 rounded px-1.5 py-0.5 text-xs",
-					IdeaPotentialStyles[potential],
-				)}
-			>
-				<Flag className="size-3" />
-				{potential}
-			</span>
 			<span
 				className={cn(
 					"ml-auto flex items-center gap-0.5 rounded-sm bg-gray-50 px-1 py-0.5 hover:bg-gray-100",
@@ -171,17 +191,4 @@ IdeaContent.ActionItem = ({
 
 IdeaContent.TagList = ({ children }: { children: React.ReactNode }) => {
 	return <div className="flex gap-2">{children}</div>;
-};
-
-IdeaContent.TagItem = ({ tag }: { tag: string }) => {
-	return (
-		<span
-			className={cn(
-				"flex cursor-default items-center gap-1 rounded bg-gray-100 px-1.5 py-0.5 font-medium text-gray-500 text-xs",
-				"dark:bg-gray-600/70 dark:text-gray-300",
-			)}
-		>
-			{tag}
-		</span>
-	);
 };
