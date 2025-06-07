@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { type VariantProps, cva } from "class-variance-authority";
-import { Home, Lightbulb, Search, Settings, Zap } from "lucide-react";
+import { Lightbulb, Search, Settings, Zap } from "lucide-react";
 import type React from "react";
 import { useContext, useEffect, useRef, useState } from "react";
 
@@ -60,8 +60,8 @@ export const Sidebar = ({ resizeHandle = true }: SidebarProps) => {
 	return (
 		<div
 			className={cn(
-				"group relative flex h-full flex-col overflow-hidden bg-gray-50 transition-all",
-				"dark:bg-gray-800 ",
+				"group relative flex h-full flex-col overflow-hidden shadow-lg transition-all",
+				"bg-gray-100 dark:bg-gray-900",
 				isMouseDown ? "duration-0" : "duration-200",
 			)}
 			style={{
@@ -100,7 +100,7 @@ export const Sidebar = ({ resizeHandle = true }: SidebarProps) => {
 					onMouseDown={() => setIsMouseDown(true)}
 					onTouchStart={() => setIsMouseDown(true)}
 					className={
-						"absolute top-0 right-0 h-full w-1 cursor-ew-resize bg-gray-500 opacity-0 hover:opacity-60 group-hover:opacity-25"
+						"absolute top-0 right-0 h-full w-1 cursor-ew-resize bg-gray-500 opacity-0 hover:opacity-60 group-hover:opacity-25 dark:bg-gray-200/60"
 					}
 				/>
 			)}
@@ -113,15 +113,17 @@ Sidebar.HeaderContent = () => {
 		<>
 			<div
 				className={cn(
-					"flex shrink-0 items-center gap-1 rounded-md px-2 py-1 hover:bg-gray-200",
-					"dark:bg-gray-700 dark:hover:bg-gray-600",
+					"flex shrink-0 items-center gap-1 rounded-sm px-2 py-1 hover:bg-gray-200",
+					"dark:bg-gray-800 dark:hover:bg-gray-700",
 				)}
 			>
-				<div className="flex size-10 flex-row items-center justify-center rounded-md bg-gray-950">
+				<div className="flex size-10 flex-row items-center justify-center rounded-md bg-green-700 dark:bg-green-800">
 					<Zap className="size-6 text-white" />
 				</div>
 				<div className="-gap-0.5 flex select-none flex-col justify-center">
-					<h1 className="font-bold text-md tracking-wide">Iden</h1>
+					<h1 className="font-bold text-green-800 text-md tracking-wide dark:text-green-50">
+						Iden
+					</h1>
 					<span className="font-light text-gray-500 text-sm dark:text-gray-300">
 						Your ideas vault
 					</span>
@@ -148,7 +150,7 @@ Sidebar.Footer = ({ className, ...props }: React.ComponentProps<"div">) => {
 		<div
 			className={cn(
 				"mt-auto flex w-full min-w-[224px] select-none items-center gap-2 overflow-hidden p-1 px-4 py-2 pr-2 font-medium hover:bg-gray-200",
-				"dark:bg-gray-700 dark:hover:bg-gray-600",
+				"dark:bg-gray-800 dark:hover:bg-gray-700",
 				className,
 			)}
 			{...props}

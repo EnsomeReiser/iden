@@ -1,8 +1,9 @@
 import { SidebarContext } from "@/components/sidebar/sidebar-provider";
-import { SidebarCloseIcon, SidebarOpen } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Sidebar, SidebarCloseIcon, SidebarOpen } from "lucide-react";
 import { useContext } from "react";
 
-export const SidebarToggle = () => {
+export const SidebarToggle = ({ className }: { className?: string }) => {
 	const context = useContext(SidebarContext);
 
 	if (!context) {
@@ -12,8 +13,8 @@ export const SidebarToggle = () => {
 	const { toggleSidebar, isOpen } = context;
 
 	return isOpen ? (
-		<SidebarCloseIcon onClick={toggleSidebar} />
+		<Sidebar className={cn("size-6", className)} onClick={toggleSidebar} />
 	) : (
-		<SidebarOpen onClick={toggleSidebar} />
+		<SidebarOpen className={cn("size-6", className)} onClick={toggleSidebar} />
 	);
 };
