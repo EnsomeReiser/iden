@@ -18,7 +18,7 @@ export const IdeaContent = ({ data }: { data?: Idea[] }) => {
 	}
 
 	return (
-		<div className="mt-4 grid grid-cols-1 items-start justify-start gap-x-4 gap-y-3 overflow-auto px-4 md:grid-cols-2">
+		<div className="mt-4 grid @4xl:grid-cols-3 @xl:grid-cols-2 grid-cols-1 items-start justify-start gap-x-4 gap-y-3 overflow-auto px-4">
 			{data.map((idea) => (
 				<IdeaContent.Card key={idea.id}>
 					<IdeaContent.Header status={idea.status} potential={idea.potential} />
