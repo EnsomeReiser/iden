@@ -10,7 +10,7 @@ type Props = {
 
 export const Header = ({ title, children }: Props) => {
 	return (
-		<div className="mx-auto flex h-12 w-full items-center gap-2 px-8">
+		<div className="mx-auto flex h-12 w-full items-center gap-2 px-8 py-2">
 			<SidebarToggle className="size-6" />
 			<h1 className="mr-auto font-medium text-lg">{title}</h1>
 			{children}

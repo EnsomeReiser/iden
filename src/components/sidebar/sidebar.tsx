@@ -100,7 +100,7 @@ export const Sidebar = ({ resizeHandle = true }: SidebarProps) => {
 					onMouseDown={() => setIsMouseDown(true)}
 					onTouchStart={() => setIsMouseDown(true)}
 					className={
-						"absolute top-0 right-0 h-full w-1 cursor-ew-resize bg-gray-500 opacity-0 hover:opacity-60 group-hover:opacity-25 dark:bg-gray-200/60"
+						"absolute top-0 right-0 h-full w-1 cursor-ew-resize select-none bg-gray-500 opacity-0 hover:opacity-60 group-hover:opacity-25 dark:bg-gray-200/60"
 					}
 				/>
 			)}

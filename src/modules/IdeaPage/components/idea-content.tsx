@@ -3,42 +3,44 @@ import { Ellipsis, Flag, Info, type LucideProps } from "lucide-react";
 import type React from "react";
 
 import type {
+	Idea,
 	IdeaPotential,
 	IdeaStatus,
 } from "@/database/entities/ideas.entity";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { mockdata } from "@/modules/IdeaPage/components/mock";
+import { IdeaEmpty } from "@/modules/IdeaPage/components/idea-empty";
 
-export const IdeaContent = () => {
+export const IdeaContent = ({ data }: { data?: Idea[] }) => {
+	if (!data || !data.length) {
+		return <IdeaEmpty />;
+	}
+
 	return (
-		<div className="mt-4 grid flex-1 grid-cols-1 gap-x-4 gap-y-3 overflow-auto px-4 md:grid-cols-2">
-			{mockdata.map((data) => (
-				<IdeaContent.Card key={data.id}>
-					<IdeaContent.Header status={data.status} potential={data.potential} />
+		<div className="mt-4 grid grid-cols-1 items-start justify-start gap-x-4 gap-y-3 overflow-auto px-4 md:grid-cols-2">
+			{data.map((idea) => (
+				<IdeaContent.Card key={idea.id}>
+					<IdeaContent.Header status={idea.status} potential={idea.potential} />
 					<div>
-						<IdeaContent.Title data={data.title} />
-						<IdeaContent.Description description={data.description} />
+						<IdeaContent.Title data={idea.title} />
+						<IdeaContent.Description description={idea.description} />
 					</div>
 					<IdeaContent.PropertiesList>
-						<IdeaContent.Property label="Duration" value={data.duration} />
-						<IdeaContent.Property
-							label="Duration + 1"
-							value={data.duration + 1}
-						/>
-						<IdeaContent.Property
-							label="Duration + 2"
-							value={data.duration + 2}
-						/>
+						<IdeaContent.Property label="Duration" value={1} />
+						<IdeaContent.Property label="Duration + 1" value={2} />
+						<IdeaContent.Property label="Duration + 2" value={3} />
 					</IdeaContent.PropertiesList>
-					<IdeaContent.TagList>
-						{data.tags.slice(0, 3).map((tag) => (
-							<IdeaContent.Badge key={tag} label={tag} />
-						))}
-						{/* Hiện thị dấu 3 chấm nếu tags trong list nhiều hơn 3 */}
-						{data.tags.length > 3 && <IdeaContent.Badge label="..." />}
-					</IdeaContent.TagList>
+					{idea.tags && (
+						<IdeaContent.TagList>
+							{idea.tags.slice(0, 3).map((tag) => (
+								<IdeaContent.Badge key={tag} label={tag} />
+							))}
+							{/* Hiện thị dấu 3 chấm nếu tags trong list nhiều hơn 3 */}
+							{idea.tags.length > 3 && <IdeaContent.Badge label="..." />}
+						</IdeaContent.TagList>
+					)}
+
 					<IdeaContent.Action>
 						<IdeaContent.ActionItem
 							className="py-1 text-gray-600 dark:text-gray-300 hover:dark:bg-gray-600"
@@ -61,7 +63,7 @@ export const IdeaContent = () => {
 
 IdeaContent.Card = ({ children }: { children: ReactNode }) => {
 	return (
-		<div className="box-border flex w-full flex-col gap-3 rounded-sm border border-gray-200 bg-white px-4 pt-4 pb-2 shadow dark:border-gray-600 dark:bg-gray-700 dark:shadow-gray-800">
+		<div className="box-border flex h-auto w-full flex-col gap-3 rounded-sm border border-gray-200 bg-white px-4 pt-4 pb-2 shadow dark:border-gray-600 dark:bg-gray-700 dark:shadow-gray-800">
 			{children}
 		</div>
 	);
@@ -149,10 +151,10 @@ IdeaContent.Title = ({ data }: { data: string }) => {
 	return <h1 className="mb-1 line-clamp-2 font-medium">{data}</h1>;
 };
 
-IdeaContent.Description = ({ description }: { description: string }) => {
+IdeaContent.Description = ({ description }: { description?: string }) => {
 	return (
 		<p className="line-clamp-3 text-gray-600 text-sm dark:text-gray-300">
-			{description}
+			{description ? description : "No description"}
 		</p>
 	);
 };
@@ -174,7 +176,11 @@ IdeaContent.Property = ({
 };
 
 IdeaContent.Action = ({ children }: { children: React.ReactNode }) => {
-	return <div className="flex items-center justify-end gap-2">{children}</div>;
+	return (
+		<div className="mt-auto flex items-center justify-end gap-2">
+			{children}
+		</div>
+	);
 };
 
 IdeaContent.ActionItem = ({

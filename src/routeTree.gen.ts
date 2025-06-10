@@ -11,10 +11,17 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as TestImport } from './routes/test'
 import { Route as IndexImport } from './routes/index'
 import { Route as IdeasIndexImport } from './routes/ideas/index'
 
 // Create/Update Routes
+
+const TestRoute = TestImport.update({
+  id: '/test',
+  path: '/test',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -39,6 +46,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/test': {
+      id: '/test'
+      path: '/test'
+      fullPath: '/test'
+      preLoaderRoute: typeof TestImport
+      parentRoute: typeof rootRoute
+    }
     '/ideas/': {
       id: '/ideas/'
       path: '/ideas'
@@ -53,36 +67,41 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/test': typeof TestRoute
   '/ideas': typeof IdeasIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/test': typeof TestRoute
   '/ideas': typeof IdeasIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/test': typeof TestRoute
   '/ideas/': typeof IdeasIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/ideas'
+  fullPaths: '/' | '/test' | '/ideas'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/ideas'
-  id: '__root__' | '/' | '/ideas/'
+  to: '/' | '/test' | '/ideas'
+  id: '__root__' | '/' | '/test' | '/ideas/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  TestRoute: typeof TestRoute
   IdeasIndexRoute: typeof IdeasIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  TestRoute: TestRoute,
   IdeasIndexRoute: IdeasIndexRoute,
 }
 
@@ -97,11 +116,15 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/test",
         "/ideas/"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/test": {
+      "filePath": "test.tsx"
     },
     "/ideas/": {
       "filePath": "ideas/index.tsx"
