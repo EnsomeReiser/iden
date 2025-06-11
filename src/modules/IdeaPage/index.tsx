@@ -16,6 +16,53 @@ type Inputs = {
 	potential: IdeaPotential;
 };
 
+type BaseField<T> = {
+	label: string;
+	field: keyof T;
+	placeholder?: string;
+};
+
+type TextField<T> = BaseField<T> & {
+	type: "text" | "textarea";
+};
+
+type SelectField<T> = BaseField<T> & {
+	type: "select";
+	options: string[];
+};
+
+type Field<T> = TextField<T> | SelectField<T>;
+
+function createFormFields<T>() {
+	return <F extends Field<T>[]>(fields: F) => fields;
+}
+
+const formData: Field<Inputs>[] = [
+	{
+		label: "title",
+		field: "title",
+		type: "text",
+		placeholder: "Title of your ideas",
+	},
+	{
+		label: "description",
+		field: "description",
+		type: "textarea",
+	},
+	{
+		label: "status",
+		field: "status",
+		type: "select",
+		options: Object.values(IdeaStatus),
+	},
+	{
+		label: "potential",
+		field: "potential",
+		type: "select",
+		options: Object.values(IdeaPotential),
+	},
+];
+
 export const IdeaPage = () => {
 	const [showOverlay, setShowOverlay] = useState(false);
 	const { register, getValues } = useForm<Inputs>();
@@ -24,6 +71,44 @@ export const IdeaPage = () => {
 
 	const handleHeaderAction = () => {
 		setShowOverlay(true);
+	};
+
+	const fieldRenderers: Record<
+		string,
+		(field: Field<Inputs>) => React.ReactNode
+	> = {
+		text: (field) => (
+			<input
+				className="border border-gray-500"
+				{...field}
+				{...register(field.field)}
+			/>
+		),
+		textarea: (field) => (
+			<textarea
+				className="border border-gray-500"
+				{...field}
+				{...register(field.field)}
+			/>
+		),
+		select: (field: SelectField<Inputs>) => (
+			<select
+				className="border border-gray-500 text-black"
+				{...register("status")}
+			>
+				{field.options.map((option) => (
+					<option className="text-black" key={option} value={option}>
+						{option}{" "}
+					</option>
+				))}
+			</select>
+		),
+	};
+
+	const renderField = (field: Field) => {
+		const render =
+			fieldRenderers[field.type] ?? (() => <div>Unsupported field</div>);
+		return <Dialog.Field label={field.label}>{render(field)}</Dialog.Field>;
 	};
 
 	const addIdea = async () => {
@@ -50,38 +135,7 @@ export const IdeaPage = () => {
 
 			<Dialog isOpen={showOverlay} onOpenChange={setShowOverlay}>
 				<Dialog.Title>Hello</Dialog.Title>
-				<Dialog.Body>
-					<Dialog.Field label="Name:">
-						<input className="border border-gray-500" {...register("title")} />
-					</Dialog.Field>
-					<Dialog.Field label="Description:">
-						<textarea
-							className="border border-gray-500"
-							{...register("description")}
-						/>
-					</Dialog.Field>
-					<Dialog.Field label="status:">
-						<select className="border border-gray-500" {...register("status")}>
-							{Object.values(IdeaStatus).map((status) => (
-								<option key={status} value={status}>
-									{status}
-								</option>
-							))}
-						</select>
-					</Dialog.Field>
-					<Dialog.Field label="potenial:">
-						<select
-							className="border border-gray-500"
-							{...register("potential")}
-						>
-							{Object.values(IdeaPotential).map((potential) => (
-								<option key={potential} value={potential}>
-									{potential}
-								</option>
-							))}
-						</select>
-					</Dialog.Field>
-				</Dialog.Body>
+				<Dialog.Body>{formData.map((field) => renderField(field))}</Dialog.Body>
 				<Dialog.Footer>
 					<button type="button" onClick={() => setShowOverlay(false)}>
 						Close

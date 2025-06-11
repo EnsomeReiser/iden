@@ -16,7 +16,7 @@ export const IdeaPotential = {
 	High: "High",
 	Medium: "Medium",
 	Low: "Low",
-};
+} as const;
 
 export type IdeaPotential = (typeof IdeaPotential)[keyof typeof IdeaPotential];
 
