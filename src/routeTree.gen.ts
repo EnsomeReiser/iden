@@ -10,85 +10,85 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/index'
-import { Route as IdeasIndexImport } from './routes/ideas/index'
+import { Route as rootRoute } from "./routes/__root";
+import { Route as IndexImport } from "./routes/index";
+import { Route as IdeasIndexImport } from "./routes/ideas/index";
 
 // Create/Update Routes
 
 const IndexRoute = IndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRoute,
-} as any)
+	id: "/",
+	path: "/",
+	getParentRoute: () => rootRoute,
+} as any);
 
 const IdeasIndexRoute = IdeasIndexImport.update({
-  id: '/ideas/',
-  path: '/ideas/',
-  getParentRoute: () => rootRoute,
-} as any)
+	id: "/ideas/",
+	path: "/ideas/",
+	getParentRoute: () => rootRoute,
+} as any);
 
 // Populate the FileRoutesByPath interface
 
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/ideas/': {
-      id: '/ideas/'
-      path: '/ideas'
-      fullPath: '/ideas'
-      preLoaderRoute: typeof IdeasIndexImport
-      parentRoute: typeof rootRoute
-    }
-  }
+declare module "@tanstack/react-router" {
+	interface FileRoutesByPath {
+		"/": {
+			id: "/";
+			path: "/";
+			fullPath: "/";
+			preLoaderRoute: typeof IndexImport;
+			parentRoute: typeof rootRoute;
+		};
+		"/ideas/": {
+			id: "/ideas/";
+			path: "/ideas";
+			fullPath: "/ideas";
+			preLoaderRoute: typeof IdeasIndexImport;
+			parentRoute: typeof rootRoute;
+		};
+	}
 }
 
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/ideas': typeof IdeasIndexRoute
+	"/": typeof IndexRoute;
+	"/ideas": typeof IdeasIndexRoute;
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/ideas': typeof IdeasIndexRoute
+	"/": typeof IndexRoute;
+	"/ideas": typeof IdeasIndexRoute;
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/ideas/': typeof IdeasIndexRoute
+	__root__: typeof rootRoute;
+	"/": typeof IndexRoute;
+	"/ideas/": typeof IdeasIndexRoute;
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/ideas'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/ideas'
-  id: '__root__' | '/' | '/ideas/'
-  fileRoutesById: FileRoutesById
+	fileRoutesByFullPath: FileRoutesByFullPath;
+	fullPaths: "/" | "/ideas";
+	fileRoutesByTo: FileRoutesByTo;
+	to: "/" | "/ideas";
+	id: "__root__" | "/" | "/ideas/";
+	fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  IdeasIndexRoute: typeof IdeasIndexRoute
+	IndexRoute: typeof IndexRoute;
+	IdeasIndexRoute: typeof IdeasIndexRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  IdeasIndexRoute: IdeasIndexRoute,
-}
+	IndexRoute: IndexRoute,
+	IdeasIndexRoute: IdeasIndexRoute,
+};
 
 export const routeTree = rootRoute
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+	._addFileChildren(rootRouteChildren)
+	._addFileTypes<FileRouteTypes>();
 
 /* ROUTE_MANIFEST_START
 {

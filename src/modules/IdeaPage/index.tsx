@@ -1,114 +1,32 @@
 import { Dialog } from "@/components/dialog";
+import { FormRenderer } from "@/components/form-renderer";
 import { Header } from "@/components/header";
+import { Button } from "@/components/ui/button";
 import { db } from "@/database/db";
-import { IdeaPotential, IdeaStatus } from "@/database/entities/ideas.entity";
 import { IdeaContent } from "@/modules/IdeaPage/components/idea-content";
 import { IdeaFilter } from "@/modules/IdeaPage/components/idea-filter";
+import {
+	type IdeaInputs,
+	ideaFormFields,
+} from "@/modules/IdeaPage/form.config";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
-type Inputs = {
-	title: string;
-	description: string;
-	status: IdeaStatus;
-	potential: IdeaPotential;
-};
-
-type BaseField<T> = {
-	label: string;
-	field: keyof T;
-	placeholder?: string;
-};
-
-type TextField<T> = BaseField<T> & {
-	type: "text" | "textarea";
-};
-
-type SelectField<T> = BaseField<T> & {
-	type: "select";
-	options: string[];
-};
-
-type Field<T> = TextField<T> | SelectField<T>;
-
-function createFormFields<T>() {
-	return <F extends Field<T>[]>(fields: F) => fields;
-}
-
-const formData: Field<Inputs>[] = [
-	{
-		label: "title",
-		field: "title",
-		type: "text",
-		placeholder: "Title of your ideas",
-	},
-	{
-		label: "description",
-		field: "description",
-		type: "textarea",
-	},
-	{
-		label: "status",
-		field: "status",
-		type: "select",
-		options: Object.values(IdeaStatus),
-	},
-	{
-		label: "potential",
-		field: "potential",
-		type: "select",
-		options: Object.values(IdeaPotential),
-	},
-];
-
 export const IdeaPage = () => {
-	const [showOverlay, setShowOverlay] = useState(false);
-	const { register, getValues } = useForm<Inputs>();
+	const [showOverlay, setShowOverlay] = useState(true);
+	const {
+		register,
+		getValues,
+		formState: { errors },
+		handleSubmit,
+	} = useForm<IdeaInputs>();
 
 	const ideas = useLiveQuery(() => db.ideas.toArray());
 
 	const handleHeaderAction = () => {
 		setShowOverlay(true);
-	};
-
-	const fieldRenderers: Record<
-		string,
-		(field: Field<Inputs>) => React.ReactNode
-	> = {
-		text: (field) => (
-			<input
-				className="border border-gray-500"
-				{...field}
-				{...register(field.field)}
-			/>
-		),
-		textarea: (field) => (
-			<textarea
-				className="border border-gray-500"
-				{...field}
-				{...register(field.field)}
-			/>
-		),
-		select: (field: SelectField<Inputs>) => (
-			<select
-				className="border border-gray-500 text-black"
-				{...register("status")}
-			>
-				{field.options.map((option) => (
-					<option className="text-black" key={option} value={option}>
-						{option}{" "}
-					</option>
-				))}
-			</select>
-		),
-	};
-
-	const renderField = (field: Field) => {
-		const render =
-			fieldRenderers[field.type] ?? (() => <div>Unsupported field</div>);
-		return <Dialog.Field label={field.label}>{render(field)}</Dialog.Field>;
 	};
 
 	const addIdea = async () => {
@@ -135,14 +53,26 @@ export const IdeaPage = () => {
 
 			<Dialog isOpen={showOverlay} onOpenChange={setShowOverlay}>
 				<Dialog.Title>Hello</Dialog.Title>
-				<Dialog.Body>{formData.map((field) => renderField(field))}</Dialog.Body>
+				<Dialog.Body>
+					<form id="create-idea" onSubmit={handleSubmit(addIdea)}>
+						<FormRenderer
+							fields={ideaFormFields}
+							register={register}
+							errors={errors}
+						/>
+					</form>
+				</Dialog.Body>
 				<Dialog.Footer>
-					<button type="button" onClick={() => setShowOverlay(false)}>
+					<Button
+						variant="secondary"
+						type="button"
+						onClick={() => setShowOverlay(false)}
+					>
 						Close
-					</button>
-					<button type="button" onClick={addIdea}>
+					</Button>
+					<Button type="submit" form="create-idea">
 						Add
-					</button>
+					</Button>
 				</Dialog.Footer>
 			</Dialog>
 		</>
