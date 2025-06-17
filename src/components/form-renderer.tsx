@@ -1,4 +1,7 @@
 import { Dialog } from "@/components/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 import type { AnyType } from "@/types";
 import type { FormField, SelectField, TextField } from "@/types/form";
 import type {
@@ -20,9 +23,9 @@ export const FormRenderer = <T extends FieldValues>({
 	errors,
 }: FormRendererProps<T>) => {
 	const renderTextField = (field: TextField<T>) => {
-		const InputComponent = field.type === "textarea" ? "textarea" : "input";
+		const InputComponent = field.type === "textarea" ? Textarea : Input;
 		const inputProps = {
-			className: "border border-gray-500",
+			className: cn("border border-gray-500"),
 			placeholder: field.placeholder,
 			disabled: field.disabled,
 			...(field.type !== "textarea" && { type: field.type }),
@@ -34,11 +37,11 @@ export const FormRenderer = <T extends FieldValues>({
 
 	const renderSelectField = (field: SelectField<T>) => (
 		<select
-			className="border border-gray-500 text-black"
+			className="rounded-sm border border-gray-500 ring-ring/10 focus-visible:outline-1 focus-visible:ring-4"
 			{...register(field.field as Path<T>)}
 		>
 			{field.options.map((option) => (
-				<option className="text-black" key={option} value={option}>
+				<option className="cursor-default text-sm" key={option} value={option}>
 					{option}
 				</option>
 			))}

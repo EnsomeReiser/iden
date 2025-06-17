@@ -6,6 +6,7 @@ export type IdeaInputs = {
 	description: string;
 	status: IdeaStatus;
 	potential: IdeaPotential;
+	duration: number;
 };
 
 export const ideaFormFields: FormField<IdeaInputs>[] = [
@@ -13,15 +14,22 @@ export const ideaFormFields: FormField<IdeaInputs>[] = [
 		label: "Title",
 		field: "title",
 		type: "text",
-		placeholder: "Title of your ideas",
+		placeholder: "Title of your idea",
 	},
 	{
 		label: "Description",
 		field: "description",
 		type: "textarea",
 		placeholder: "Describe your idea",
+	},
+	{
+		label: "Duration",
+		field: "duration",
+		type: "number",
+		defaultValue: 1,
 		rules: {
-			required: true,
+			min: { value: 1, message: "Minimum duration is 1 week" },
+			max: { value: 54, message: "Maximum duration is 100 week" },
 		},
 	},
 	{

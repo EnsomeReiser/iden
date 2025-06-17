@@ -1,10 +1,31 @@
 import { Slot } from "@/components/slot";
+import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import type { ReactNode } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import type { FieldError, ValidationRule } from "react-hook-form";
 
 export const Dialog = ({ children, isOpen, onOpenChange }) => {
+	const dialogRef = useRef<HTMLDivElement>(null);
+	const backdropRef = useRef<HTMLDivElement>(null);
+
+	useGSAP(() => {
+		if (isOpen) {
+			gsap.fromTo(
+				dialogRef.current,
+				{ opacity: 0, scale: 0.5 },
+				{ opacity: 1, scale: 1, duration: 0.15 },
+			);
+			gsap.fromTo(
+				backdropRef.current,
+				{ opacity: 0 },
+				{ opacity: 1, duration: 0.3 },
+			);
+		}
+	}, [isOpen]);
+
 	if (!isOpen) return null;
 
 	return createPortal(
@@ -16,15 +37,17 @@ export const Dialog = ({ children, isOpen, onOpenChange }) => {
 					onOpenChange(false);
 				}
 			}}
+			ref={backdropRef}
 		>
 			<div
-				className="flex max-h-4/5 min-w-96 flex-col gap-y-4 rounded-lg bg-white px-8 py-4"
+				className="flex max-h-4/5 min-w-96 flex-col gap-y-4 rounded-lg bg-white px-7 py-4"
 				onClick={(e) => e.stopPropagation()}
 				onKeyDown={(e) => {
 					if (e.key === "Enter") {
 						e.stopPropagation();
 					}
 				}}
+				ref={dialogRef}
 			>
 				{children}
 			</div>
@@ -40,7 +63,13 @@ Dialog.Title = ({
 }: React.HTMLAttributes<HTMLElement> & { asChild?: boolean }) => {
 	const Comp = asChild ? Slot : "h1";
 	return (
-		<Comp className={cn("cursor-default text-center", className)} {...props} />
+		<Comp
+			className={cn(
+				"cursor-default text-center font-semibold text-xl",
+				className,
+			)}
+			{...props}
+		/>
 	);
 };
 
@@ -48,7 +77,7 @@ Dialog.Body = ({
 	className,
 	...props
 }: React.HTMLAttributes<HTMLDivElement>) => {
-	return <div className={cn("overflow-auto", className)} {...props} />;
+	return <div className={cn("overflow-y-auto px-1", className)} {...props} />;
 };
 
 interface FieldProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -66,14 +95,18 @@ Dialog.Field = ({
 	...props
 }: FieldProps) => {
 	return (
-		<div className={cn("flex flex-col capitalize", className)} {...props}>
-			{/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
-			<label>
+		<div
+			className={cn("mt-2 flex flex-col gap-1.5 capitalize", className)}
+			{...props}
+		>
+			<Label className={error && "text-red-500"}>
 				{label}
 				{required && "(*)"}:
-			</label>
+			</Label>
 			{children}
-			{error && (error?.message ? error.message : "Error")}
+			<span className="font-medium text-red-500 text-sm">
+				{error && (error?.message ? error.message : "Error")}
+			</span>
 		</div>
 	);
 };
@@ -84,7 +117,7 @@ Dialog.Footer = ({
 }: React.HTMLAttributes<HTMLDivElement>) => {
 	return (
 		<div
-			className={cn("flex items-center justify-end gap-2", className)}
+			className={cn("flex items-center justify-end gap-2 px-1", className)}
 			{...props}
 		/>
 	);

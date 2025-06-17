@@ -3,6 +3,7 @@ import { FormRenderer } from "@/components/form-renderer";
 import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
 import { db } from "@/database/db";
+import { formDefaultValues } from "@/lib/form-default-value";
 import { IdeaContent } from "@/modules/IdeaPage/components/idea-content";
 import { IdeaFilter } from "@/modules/IdeaPage/components/idea-filter";
 import {
@@ -15,13 +16,13 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export const IdeaPage = () => {
-	const [showOverlay, setShowOverlay] = useState(true);
+	const [showOverlay, setShowOverlay] = useState(false);
 	const {
 		register,
 		getValues,
 		formState: { errors },
 		handleSubmit,
-	} = useForm<IdeaInputs>();
+	} = useForm<IdeaInputs>({ defaultValues: formDefaultValues(ideaFormFields) });
 
 	const ideas = useLiveQuery(() => db.ideas.toArray());
 
@@ -52,7 +53,7 @@ export const IdeaPage = () => {
 			<IdeaContent data={ideas} />
 
 			<Dialog isOpen={showOverlay} onOpenChange={setShowOverlay}>
-				<Dialog.Title>Hello</Dialog.Title>
+				<Dialog.Title>Add new idea</Dialog.Title>
 				<Dialog.Body>
 					<form id="create-idea" onSubmit={handleSubmit(addIdea)}>
 						<FormRenderer
